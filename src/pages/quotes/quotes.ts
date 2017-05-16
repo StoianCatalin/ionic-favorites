@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, AlertController} from 'ionic-angular';
 import {QuoteInterface} from "../../interfaces/quote";
 import {Quote} from "../quote/quote";
+import {QuotesService} from "../../services/quotes.service";
 
 @IonicPage()
 @Component({
@@ -15,14 +16,15 @@ export class Quotes {
   constructor(
     public navCtrl: NavController,
     private navParams: NavParams,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private quotesService: QuotesService) {
   }
 
   ionViewDidLoad() {
     this.quotesGroup = this.navParams.data;
   }
 
-  onAddToFavorite(quote: Quote) {
+  onAddToFavorite(quote: QuoteInterface) {
     const alert = this.alertCtrl.create({
       title: 'Add Quote',
       message: 'Are you sure you want to add the quote?',
@@ -30,14 +32,13 @@ export class Quotes {
         {
           text: 'Yes, go ahead',
           handler: () => {
-            console.log('ok');
+            this.quotesService.addQuoteToFavorites(quote);
           }
         },
         {
           text: 'No, I changed my mind',
           role: 'cancel',
           handler: () => {
-            console.log('no');
           }
         }
       ]
